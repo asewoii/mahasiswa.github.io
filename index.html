@@ -13,77 +13,12 @@
 </head>
 
 <body>
-    <!-- PHP -->
-    <?php
-        // Data Koneksi ke database
-        $__HOST = "127.0.0.1";
-        $__DB   = "http://localhost/phpmyadmin/index.php?route=/database/structure&db=nyoman_magang";
-        $__USER = "root";
-        $__PW   = "";
-
-        // Koneksi ke database
-        $conn = new mysqli($__HOST, $__USER, $__PW, $__DB);
-        if ($conn->connect_error) {
-            die("Koneksi gagal: " . $conn->connect_error);
-        }
-
-        // Query untuk mengambil data mahasiswa
-        $sql = "SELECT * FROM table_mahasiswa";
-        $result = $conn->query($sql);
-
-        $conn->close();
-
-        // Menghapus data jika ada request DELETE
-        if (isset($_GET['delete_id'])) {
-            $delete_id = $_GET['delete_id'];
-
-            // Query untuk menghapus data
-            $conn = new mysqli($__HOST, $__USER, $__PW, $__DB);
-            $delete_sql = "DELETE FROM table_mahasiswa WHERE id = ?";
-            $stmt = $conn->prepare($delete_sql);
-            $stmt->bind_param("i", $delete_id);
-            $stmt->execute();
-            $stmt->close();
-            $conn->close();
-
-            // Redirect setelah penghapusan
-            header("Location: " . $_SERVER['PHP_SELF']);
-            exit();
-        }
-
-        // Update data jika ada request POST untuk update
-        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_id'])) {
-            $update_id = $_POST['update_id'];
-            $nama = $_POST['nama'];
-            $nim = $_POST['nim'];
-            $jurusan = $_POST['jurusan'];
-
-            // Query untuk mengupdate data
-            $conn = new mysqli($__HOST, $__USER, $__PW, $__DB);
-            $update_sql = "UPDATE table_mahasiswa SET nama = ?, nim = ?, jurusan = ? WHERE id = ?";
-            $stmt = $conn->prepare($update_sql);
-            $stmt->bind_param("sssi", $nama, $nim, $jurusan, $update_id);
-            $stmt->execute();
-            $stmt->close();
-            $conn->close();
-
-            // Redirect setelah pengupdatean
-            header("Location: " . $_SERVER['PHP_SELF']);
-            exit();
-        }
-    ?>
-    <!-- ! CLOSE ! -->
-
     <!-- ! Navbar ! -->
     <nav class="nav_nyoman navbar navbar-expand-sm navbar-dark">
         <h1 class="judul_nby text-end">Table Mahasiswa</h1>
         <button class="plus_mahasiswa " type="button" data-bs-target="#mahasiswaplus" data-bs-toggle="modal">Tambah Data
             Mahasiswa</button>
     </nav>
-    <!-- ! CLOSE ! -->
-
-    <!-- Pesan Sukses/Error -->
-
     <!-- ! CLOSE ! -->
 
     <!-- Form untuk Menambah Data Mahasiswa -->
@@ -174,29 +109,6 @@
                     <th>Delet</th>
                 </tr>
             </thead>
-
-            <?php
-                if ($result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
-                    echo "<tr>
-                            <td>{$row['id']}</td>
-                            <td>{$row['nama']}</td>
-                            <td>{$row['nim']}</td>
-                            <td>{$row['jurusan']}</td>
-                            <td>{$row['updated_at']}</td>
-                            <td><button class='btn btn-warning' onclick='editData({$row['id']}, \"{$row['nama']}\", \"{$row['nim']}\", \"{$row['jurusan']}\")' data-bs-toggle='modal' data-bs-target='#editmahasiswa'>Edit</button></td>
-
-                            <td><a href='?delete_id={$row['id']}' class='btn btn-danger' onclick='return confirm(\"Apakah Anda yakin ingin menghapus data ini?\")'>Hapus</a></td>
-                        </tr>";
-                }
-                echo "</table>";
-            } else {
-                echo "
-                    <div class='alert alert-info alert-dismissible fade show'>
-                        <strong>Data Kosong!</strong>
-                        <button type='button' class='btn-close' data-bs-dismiss='alert'></button>
-                    </div>";
-            }?>
         </table>
     </div>
     <!-- ! CLOSE ! -->
