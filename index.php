@@ -17,7 +17,7 @@
     <?php
         // Data Koneksi ke database
         $__HOST = "127.0.0.1";
-        $__DB   = "nyoman_magang";
+        $__DB   = "http://localhost/phpmyadmin/index.php?route=/database/structure&db=nyoman_magang";
         $__USER = "root";
         $__PW   = "";
 
