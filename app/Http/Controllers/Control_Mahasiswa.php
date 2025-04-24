@@ -29,7 +29,7 @@ class Control_Mahasiswa extends Controller {
         $mahasiswa->jurusan     = $jurusanList[$request->jurusan]; //INI MAPPING
 
         $mahasiswa->save();
-        header("Location: " . $_SERVER['PHP_SELF']);
+        return redirect('plus_mahasiswa.php');
     }
 
     public function update(Request $request, $id) {
